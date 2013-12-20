@@ -148,6 +148,7 @@ function notifier_notification_send($hook, $type, $result, $params) {
 	$ia = elgg_set_ignore_access(true);
 
 	$object = $event->getObject();
+	$string = "river:create:{$object->getType()}:{$object->getSubtype()}";
 	$recipient = $notification->getRecipient();
 	$actor = $event->getActor();
 	switch ($object->getType()) {
@@ -162,6 +163,7 @@ function notifier_notification_send($hook, $type, $result, $params) {
 			if ($object instanceof ElggComment) {
 				// Use comment's container as notification target
 				$entity = $object->getContainerEntity();
+				$string = "river:comment:{$entity->getType()}:{$entity->getSubtype()}";
 
 				// TODO How about discussion replies?
 			} else {
@@ -182,8 +184,6 @@ function notifier_notification_send($hook, $type, $result, $params) {
 			// TODO Update time_created?
 		}
 	}
-
-	$string = "river:create:{$object->getType()}:{$object->getSubtype()}";
 
 	// Use summary string if river string is not available
 	if ($string == elgg_echo($string) && !empty($notification->summary)) {
